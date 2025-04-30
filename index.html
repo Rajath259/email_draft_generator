@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Draft Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-image: url('nature.jpg'); /* Change to any nature image */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+        textarea, input, select {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 14px;
+        }
+        textarea {
+            height: 150px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Email Draft Generator</h2>
+        
+        <label for="datasetId">Dataset ID:</label>
+        <input type="text" id="datasetId" placeholder="Enter Dataset ID">
+        
+        <label for="datasetName">Dataset Name:</label>
+        <input type="text" id="datasetName" placeholder="Enter Dataset Name">
+        
+        <label for="opsgenieNumber">Opsgenie Number:</label>
+        <input type="text" id="opsgenieNumber" placeholder="Enter Opsgenie Number">
+        
+        <label for="sessionUser">Session User:</label>
+        <input type="text" id="sessionUser" placeholder="Enter Session User">
+        
+        <label for="errorDetails">Error Details:</label>
+        <textarea id="errorDetails" placeholder="Enter Error Details"></textarea>
+        
+        <label for="intakeInfo">Intake Info:</label>
+        <textarea id="intakeInfo" placeholder="Enter Intake Info"></textarea>
+        
+        <label for="loadPattern">Load Pattern:</label>
+        <textarea id="loadPattern" placeholder="Enter Load Pattern"></textarea>
+        
+        <label for="timestamp">Timestamp:</label>
+        <input type="text" id="timestamp" placeholder="Enter Timestamp">
+        
+        <label for="alertType">Choose an alert type:</label>
+        <select id="alertType" onchange="generateEmail()">
+            <option value="">-- Select --</option>
+            <option value="INTAKE_SERVER_ERROR">INTAKE_SERVER_ERROR</option>
+            <option value="Update_Workflow_Failure">Update_Workflow_Failure</option>
+            <option value="Insert_Workflow_Failure">Insert_Workflow_Failure</option>
+			<option value="LAKE_HOUSE_LOAD_FAILURE">LAKE_HOUSE_LOAD_FAILURE</option>
+			<option value="Dataset update Workflow failure">Dataset update Workflow failure</option>
+        </select>
+        
+        <button onclick="generateEmail()">Submit</button>
+        
+        <h3>Subject:</h3>
+        <input type="text" id="emailSubject" placeholder="Subject will appear here..." readonly>
+        
+        <h3>Draft:</h3>
+        <textarea id="emailBody" placeholder="Your drafted email will appear here..." readonly></textarea>
+    </div>
+    
+    <div class="footer">Rajath N Prasad | DevOps Engg</div>
+
+    <script>
+        function generateEmail() {
+            var datasetId = document.getElementById("datasetId").value;
+            var datasetName = document.getElementById("datasetName").value;
+            var opsgenieNumber = document.getElementById("opsgenieNumber").value;
+            var sessionUser = document.getElementById("sessionUser").value;
+            var errorDetails = document.getElementById("errorDetails").value;
+            var intakeInfo = document.getElementById("intakeInfo").value;
+            var loadPattern = document.getElementById("loadPattern").value;
+            var timestamp = document.getElementById("timestamp").value;
+            var alertType = document.getElementById("alertType").value;
+            
+            if (datasetId && datasetName && opsgenieNumber && alertType) {
+                document.getElementById("emailSubject").value = `ACTION REQUIRED: Failure alert ${opsgenieNumber} for ${datasetName} (${datasetId})`;
+                
+                document.getElementById("emailBody").value = `Hi Team,\n\nYou are listed as the Technical/Business Stewards for \"${datasetName}\" \"${datasetId}\".\n\nI'm the on-call engineer supporting the data lake, and we received an \"${alertType}\" alert for your dataset.\n\nError Info:\n${errorDetails}\n\nSession Info:\n${sessionUser}\n\nIntake Info:\n${intakeInfo}\n\nLoad Pattern:\n${loadPattern}\n\nTimestamp:\n${timestamp}\n\nBest Regards,\nRajath N Prasad\nDevOps Engg`;
+            } else {
+                document.getElementById("emailSubject").value = "";
+                document.getElementById("emailBody").value = "";
+            }
+        }
+    </script>
+</body>
+</html>
